@@ -17,7 +17,8 @@ RUN pip install streamlit awscli
 EXPOSE 8501
 
 # Fetch API Key from AWS SSM at container runtime
-CMD ["bash", "-c", "
-    export GROQ_API_KEY=$(aws ssm get-parameter --name 'GROQ_API_KEY' --with-decryption --query 'Parameter.Value' --output text) &&
+CMD ["sh", "-c", "
+    GROQ_API_KEY=$(aws ssm get-parameter --name 'GROQ_API_KEY' --with-decryption --query 'Parameter.Value' --output text) &&
+    export GROQ_API_KEY &&
     streamlit run app.py --server.port=8501 --server.address=0.0.0.0
 "]

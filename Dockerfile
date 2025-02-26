@@ -16,9 +16,9 @@ RUN pip install streamlit awscli
 # Expose Streamlit port
 EXPOSE 8501
 
-# Fetch API Key from AWS SSM at container runtime
-CMD ["sh", "-c", "
-    GROQ_API_KEY=$(aws ssm get-parameter --name 'GROQ_API_KEY' --with-decryption --query 'Parameter.Value' --output text) &&
-    export GROQ_API_KEY &&
-    streamlit run app.py --server.port=8501 --server.address=0.0.0.0
-"]
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Run the script
+ENTRYPOINT ["/entrypoint.sh"]
